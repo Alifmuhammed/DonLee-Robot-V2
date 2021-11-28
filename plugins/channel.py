@@ -3,7 +3,9 @@
 # All rights reserved by PR0FESS0R-99
 # License -> https://github.com/PR0FESS0R-99/DonLee_Robot/blob/main/LICENSE
 
-import random, string, asyncio
+import random
+import string
+import asyncio
 from pyrogram import Client, filters
 from pyrogram.errors import UserAlreadyParticipant, FloodWait
 from donlee_robot.logger import VERIFY
@@ -13,10 +15,10 @@ from database import Database
 
 db = Database()
 
-@Client.on_message(filters.command(["addchannel"]) & filters.group, group=1)
+@DonLee_Robot.on_message(filters.command(["addchannel"]) & filters.group, group=1)
 async def connect(bot: DonLee_Robot, update):
     """
-    A Funtion To Handle Incoming /addchannel Command To Connect A Chat With Group
+    A Funtion To Handle Incoming /addchannel Command TO COnnect A Chat With Group
     """
     chat_id = update.chat.id
     user_id = update.from_user.id if update.from_user else None
@@ -48,7 +50,7 @@ async def connect(bot: DonLee_Robot, update):
             target = int(target_chat[1])
                 
     except Exception:
-        await update.reply_text("Invalid Input...\nYou Should Specify Valid <code>chat_id(-100xxxxxxxxxx)</code> or <code>@username</code> use This Bot @MT_ID_Bot")
+        await update.reply_text("Invalid Input...\nYou Should Specify Valid <code>chat_id(-100xxxxxxxxxx)</code> or <code>@username</code>")
         return
     
     try:
@@ -69,7 +71,7 @@ async def connect(bot: DonLee_Robot, update):
         pass
     
     except Exception:
-        await update.reply_text(f"Hello {update.from_user.mention}, \n• Try Again\n• Check Your Database\n• Chenge Your Database")
+        await update.reply_text(f"My UserBot [{userbot_name}](tg://user?id={userbot_id}) Couldnt Join The Channel `{target}` Make Sure Userbot Is Not Banned There Or Add It Manually And Try Again....!!")
         return
     
     try:
@@ -85,10 +87,10 @@ async def connect(bot: DonLee_Robot, update):
     in_db = await db.in_db(chat_id, channel_id)
     
     if in_db:
-        await update.reply_text("Channel Aldready In Database...!!!")
+        await update.reply_text("Channel Aldready In Db...!!!")
         return
     
-    wait_msg = await update.reply_text(f"Hey {update.from_user.mention} Please Wait Adding Your Channel in Database")
+    wait_msg = await update.reply_text("Please Wait Till I Add All Your Files From Channel To Db\n\n<i>This May Take 10 or 15 Mins Depending On Your No. Of Files In Channel.....</i>\n\nUntil Then Please Dont Sent Any Other Command Or This Operation May Be Intrupted....")
     
     try:
         type_list = ["video", "audio", "document"]
@@ -191,13 +193,13 @@ async def connect(bot: DonLee_Robot, update):
     await db.add_chat(chat_id, channel_id, channel_name)
     await recacher(chat_id, True, True, bot, update)
     
-    await wait_msg.edit_text(f"Channel Was Sucessfully Added in My Database \n\nTotal Files : <code>{len(data)}</code>")
+    await wait_msg.edit_text(f"Channel Was Sucessfully Added With <code>{len(data)}</code> Files..")
 
 
-@Client.on_message(filters.command(["delchannel"]) & filters.group, group=1)
+@DonLee_Robot.on_message(filters.command(["delchannel"]) & filters.group, group=1)
 async def disconnect(bot: DonLee_Robot, update):
     """
-    A Funtion To Handle Incoming /del Command TO Disconnect A Chat With A Group
+    A Funtion To Handle Incoming /delchannel Command TO Disconnect A Chat With A Group
     """
     chat_id = update.chat.id
     user_id = update.from_user.id if update.from_user else None
@@ -259,10 +261,10 @@ async def disconnect(bot: DonLee_Robot, update):
     await wait_msg.edit_text("Sucessfully Deleted All Files From DB....")
 
 
-@Client.on_message(filters.command(["delallchannel"]) & filters.group, group=1)
+@DonLee_Robot.on_message(filters.command(["delallchann"]) & filters.group, group=1)
 async def delall(bot: DonLee_Robot, update):
     """
-    A Funtion To Handle Incoming /delall Command TO Disconnect All Chats From A Group
+    A Funtion To Handle Incoming /delallchannel Command TO Disconnect All Chats From A Group
     """
     chat_id=update.chat.id
     user_id = update.from_user.id if update.from_user else None
@@ -286,7 +288,7 @@ async def delall(bot: DonLee_Robot, update):
 
 
 @Client.on_message(filters.channel & (filters.video | filters.audio | filters.document) & ~filters.edited, group=0)
-async def new_files(bot: DonLee_Robot, update):
+async def new_files(bot: Bot, update):
     """
     A Funtion To Handle Incoming New Files In A Channel ANd Add Them To Respective Channels..
     """
@@ -357,4 +359,3 @@ async def new_files(bot: DonLee_Robot, update):
         await db.add_filters(data)
     return
 
-runing = """Team mo tech"""
